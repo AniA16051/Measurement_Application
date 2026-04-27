@@ -3,65 +3,51 @@ package com.apps.MeasurementApp;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-// Specific imports for the inner classes
-import com.apps.MeasurementApp.MeasurementApp.Feet;
-import com.apps.MeasurementApp.MeasurementApp.Inches;
-
 public class MeasurementAppTest {
 
-    // --- FEET TEST CASES ---
-
+    // --- UC3 Legacy Tests ---
     @Test
-    public void testFeetEquality_SameValue() {
-        assertEquals(new Feet(1.0), new Feet(1.0));
+    public void testFeetInchesComparison() {
+        assertEquals(new Length(1.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES));
+    }
+
+    // --- UC4 Extended Tests (Yards) ---
+    @Test
+    public void yardEquals36Inches() {
+        assertEquals(new Length(1.0, Length.LengthUnit.YARDS), new Length(36.0, Length.LengthUnit.INCHES));
     }
 
     @Test
-    public void testFeetEquality_DifferentValue() {
-        assertNotEquals(new Feet(1.0), new Feet(2.0));
+    public void threeFeetEqualsOneYard() {
+        assertEquals(new Length(3.0, Length.LengthUnit.FEET), new Length(1.0, Length.LengthUnit.YARDS));
     }
 
     @Test
-    public void testFeetEquality_NullComparison() {
-        assertNotEquals(null, new Feet(1.0));
+    public void yardNotEqualToInches() {
+        assertNotEquals(new Length(1.0, Length.LengthUnit.YARDS), new Length(1.0, Length.LengthUnit.INCHES));
+    }
+
+    // --- UC4 Extended Tests (Centimeters) ---
+    @Test
+    public void centimeterEqualsInches() {
+        // Based on 1cm = 0.393701in
+        assertEquals(new Length(1.0, Length.LengthUnit.CENTIMETERS), new Length(0.39, Length.LengthUnit.INCHES));
     }
 
     @Test
-    public void testFeetEquality_DifferentClass() {
-        assertNotEquals(new Feet(1.0), new Object());
+    public void thirtyPointFourEightCmEqualsOneFoot() {
+        // 1 foot = 30.48 cm
+        assertEquals(new Length(30.48, Length.LengthUnit.CENTIMETERS), new Length(1.0, Length.LengthUnit.FEET));
     }
 
     @Test
-    public void testFeetEquality_SameReference() {
-        Feet feet = new Feet(1.0);
-        assertEquals(feet, feet);
-    }
-
-    // --- INCHES TEST CASES (UC2) ---
-
-    @Test
-    public void testInchesEquality_SameValue() {
-        assertEquals(new Inches(12.0), new Inches(12.0));
+    public void referenceEqualitySameObject() {
+        Length l1 = new Length(1.0, Length.LengthUnit.YARDS);
+        assertEquals(l1, l1);
     }
 
     @Test
-    public void testInchesEquality_DifferentValue() {
-        assertNotEquals(new Inches(12.0), new Inches(13.0));
-    }
-
-    @Test
-    public void testInchesEquality_NullComparison() {
-        assertNotEquals(null, new Inches(1.0));
-    }
-
-    @Test
-    public void testInchesEquality_DifferentClass() {
-        assertNotEquals(new Inches(1.0), new Object());
-    }
-
-    @Test
-    public void testInchesEquality_SameReference() {
-        Inches inch = new Inches(1.0);
-        assertEquals(inch, inch);
+    public void equalsReturnsFalseForNull() {
+        assertNotEquals(null, new Length(1.0, Length.LengthUnit.CENTIMETERS));
     }
 }
