@@ -1,18 +1,20 @@
-package com.apps.MeasurementApp;
 
+package com.apps.MeasurementApp;
 import java.util.Objects;
 
+/**
+ * A generic class representing length in different units.
+ * Enhanced for UC5 to include explicit conversion operations.
+ */
 public class Length {
     private final double value;
     private final LengthUnit unit;
 
     public enum LengthUnit {
-        // Step 1: Update Enum with Yards and Centimeters
-        // Factors are relative to the base unit (INCHES)
         FEET(12.0),
         INCHES(1.0),
-        YARDS(36.0),         // 1 Yard = 3 Feet = 36 Inches
-        CENTIMETERS(0.393701); // 1 Centimeter = 0.393701 Inches
+        YARDS(36.0),
+        CENTIMETERS(0.393701);
 
         private final double conversionFactor;
 
@@ -30,11 +32,26 @@ public class Length {
         this.unit = unit;
     }
 
-    // Step 2: Logic remains the same (Generic design scales effortlessly)
+    /**
+     * UC5: Explicitly converts this length instance to a target unit.
+     * returns a new Length instance with the converted value.
+     */
+    public Length convertTo(LengthUnit targetUnit) {
+        if (targetUnit == null) {
+            throw new IllegalArgumentException("Target unit cannot be null");
+        }
+        // Convert current value to base unit (inches), then divide by target factor
+        double valueInBase = this.value * this.unit.getConversionFactor();
+        double convertedValue = valueInBase / targetUnit.getConversionFactor();
+
+        // Rounding to two decimal places for precision handling
+        double roundedValue = Math.round(convertedValue * 100.0) / 100.0;
+        return new Length(roundedValue, targetUnit);
+    }
+
     private double convertToBaseUnit() {
-        // Rounding to 2 decimal places to handle floating point precision in cm comparisons
-        double converted = this.value * unit.getConversionFactor();
-        return Math.round(converted * 100.0) / 100.0;
+        double convertedValue = this.value * unit.getConversionFactor();
+        return Math.round(convertedValue * 100.0) / 100.0;
     }
 
     @Override
@@ -48,5 +65,10 @@ public class Length {
     @Override
     public int hashCode() {
         return Objects.hash(convertToBaseUnit());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%.2f %s", value, unit);
     }
 }

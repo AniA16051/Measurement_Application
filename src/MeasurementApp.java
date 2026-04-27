@@ -1,24 +1,26 @@
 package com.apps.MeasurementApp;
 
+/**
+ * UC5 - QuantityMeasurementApp: Extended Unit Support with Conversion
+ */
 public class MeasurementApp {
 
-    public static void demonstrateExtendedUnitSupport() {
-        // Yard to Feet
-        Length yard = new Length(1.0, Length.LengthUnit.YARDS);
-        Length feet = new Length(3.0, Length.LengthUnit.FEET);
-        System.out.println("1 Yard == 3 Feet: " + yard.equals(feet));
+    /**
+     * UC5: Static method to demonstrate length conversion from one unit to another.
+     */
+    public static Length demonstrateLengthConversion(double value, Length.LengthUnit fromUnit, Length.LengthUnit toUnit) {
+        Length sourceLength = new Length(value, fromUnit);
+        return sourceLength.convertTo(toUnit);
+    }
 
-        // Yard to Inches
-        Length inches = new Length(36.0, Length.LengthUnit.INCHES);
-        System.out.println("1 Yard == 36 Inches: " + yard.equals(inches));
-
-        // Centimeters to Inches
-        Length cm = new Length(100.0, Length.LengthUnit.CENTIMETERS);
-        Length in = new Length(39.37, Length.LengthUnit.INCHES);
-        System.out.println("100 cm == 39.37 Inches: " + cm.equals(in));
+    public static boolean demonstrateLengthEquality(Length l1, Length l2) {
+        return l1.equals(l2);
     }
 
     public static void main(String[] args) {
-        demonstrateExtendedUnitSupport();
+        // Examples based on UC5 expected output
+        System.out.println("1.0 FEET to INCHES: " + demonstrateLengthConversion(1.0, Length.LengthUnit.FEET, Length.LengthUnit.INCHES));
+        System.out.println("3.0 YARDS to FEET: " + demonstrateLengthConversion(3.0, Length.LengthUnit.YARDS, Length.LengthUnit.FEET));
+        System.out.println("36.0 INCHES to YARDS: " + demonstrateLengthConversion(36.0, Length.LengthUnit.INCHES, Length.LengthUnit.YARDS));
     }
 }

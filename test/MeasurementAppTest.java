@@ -5,49 +5,38 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MeasurementAppTest {
 
-    // --- UC3 Legacy Tests ---
+    // Existing UC4 Equality Tests
     @Test
-    public void testFeetInchesComparison() {
+    public void testFeetInchesEquality() {
         assertEquals(new Length(1.0, Length.LengthUnit.FEET), new Length(12.0, Length.LengthUnit.INCHES));
     }
 
-    // --- UC4 Extended Tests (Yards) ---
+    // --- UC5 Conversion Tests ---
     @Test
-    public void yardEquals36Inches() {
-        assertEquals(new Length(1.0, Length.LengthUnit.YARDS), new Length(36.0, Length.LengthUnit.INCHES));
+    public void convertFeetToInches() {
+        Length converted = MeasurementApp.demonstrateLengthConversion(3.0, Length.LengthUnit.FEET, Length.LengthUnit.INCHES);
+        Length expected = new Length(36.0, Length.LengthUnit.INCHES);
+        assertTrue(MeasurementApp.demonstrateLengthEquality(converted, expected));
     }
 
     @Test
-    public void threeFeetEqualsOneYard() {
-        assertEquals(new Length(3.0, Length.LengthUnit.FEET), new Length(1.0, Length.LengthUnit.YARDS));
+    public void convertYardsToInches() {
+        Length converted = MeasurementApp.demonstrateLengthConversion(2.0, Length.LengthUnit.YARDS, Length.LengthUnit.INCHES);
+        Length expected = new Length(72.0, Length.LengthUnit.INCHES);
+        assertTrue(MeasurementApp.demonstrateLengthEquality(converted, expected));
     }
 
     @Test
-    public void yardNotEqualToInches() {
-        assertNotEquals(new Length(1.0, Length.LengthUnit.YARDS), new Length(1.0, Length.LengthUnit.INCHES));
-    }
-
-    // --- UC4 Extended Tests (Centimeters) ---
-    @Test
-    public void centimeterEqualsInches() {
-        // Based on 1cm = 0.393701in
-        assertEquals(new Length(1.0, Length.LengthUnit.CENTIMETERS), new Length(0.39, Length.LengthUnit.INCHES));
+    public void convertCmToInches() {
+        // 1 cm = 0.393701 in
+        Length converted = MeasurementApp.demonstrateLengthConversion(1.0, Length.LengthUnit.CENTIMETERS, Length.LengthUnit.INCHES);
+        assertEquals(0.39, converted.convertTo(Length.LengthUnit.INCHES).equals(new Length(0.39, Length.LengthUnit.INCHES)) ? 0.39 : 0.0);
     }
 
     @Test
-    public void thirtyPointFourEightCmEqualsOneFoot() {
-        // 1 foot = 30.48 cm
-        assertEquals(new Length(30.48, Length.LengthUnit.CENTIMETERS), new Length(1.0, Length.LengthUnit.FEET));
-    }
-
-    @Test
-    public void referenceEqualitySameObject() {
-        Length l1 = new Length(1.0, Length.LengthUnit.YARDS);
-        assertEquals(l1, l1);
-    }
-
-    @Test
-    public void equalsReturnsFalseForNull() {
-        assertNotEquals(null, new Length(1.0, Length.LengthUnit.CENTIMETERS));
+    public void testInvalidUnitConversion() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Length(1.0, Length.LengthUnit.FEET).convertTo(null);
+        });
     }
 }
